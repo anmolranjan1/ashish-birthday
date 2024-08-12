@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <style>
+        body {
+            margin: 0;
+            background: url("background.png") no-repeat center center fixed;
+            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .balloon {
+            display: inline-block;
+            width: 78px;
+            height: 88px;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 
+                        inset 0 -5px 5px rgba(0, 0, 0, 0.2),
+                        inset 0 0 10px rgba(255, 255, 255, 0.6);
+            color: white;
+            font-weight: bold;
+            font-family: cursive;
+            text-align: center;
+            line-height: 88px;
+            opacity: 0;
+            transform: perspective(300px) rotateX(10deg) rotateY(10deg);
+            transition: transform 0.3s;
+        }
+        .balloon:hover {
+            transform: perspective(300px) rotateX(0deg) rotateY(0deg) scale(1.1);
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .row1 {
+            top: 5%; /* Upper half positioning */
+        }
+        .row2 {
+            top: 15%; /* Upper half positioning */
+        }
+        .row3 {
+            top: 25%; /* Upper half positioning */
+        }
+        @keyframes floatAndForm {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes formRow {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="row row1">
+        <!-- Balloons for "HAPPY" -->
+        <div class="balloon" id="H1">H</div>
+        <div class="balloon" id="H2">A</div>
+        <div class="balloon" id="H3">P</div>
+        <div class="balloon" id="H4">P</div>
+        <div class="balloon" id="H5">Y</div>
+    </div>
+    <div class="row row2">
+        <!-- Balloons for "BIRTHDAY" -->
+        <div class="balloon" id="B1">B</div>
+        <div class="balloon" id="B2">I</div>
+        <div class="balloon" id="B3">R</div>
+        <div class="balloon" id="B4">T</div>
+        <div class="balloon" id="B5">H</div>
+        <div class="balloon" id="B6">D</div>
+        <div class="balloon" id="B7">A</div>
+        <div class="balloon" id="B8">Y</div>
+    </div>
+    <div class="row row3">
+        <!-- Balloons for "ASHISH" -->
+        <div class="balloon" id="A1">A</div>
+        <div class="balloon" id="A2">S</div>
+        <div class="balloon" id="A3">H</div>
+        <div class="balloon" id="A4">I</div>
+        <div class="balloon" id="A5">S</div>
+        <div class="balloon" id="A6">H</div>
+    </div>
+
+    <script>
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function randomPosition() {
+            const x = Math.random() * (window.innerWidth - 78); // Balloon width
+            const y = Math.random() * (window.innerHeight - 88); // Balloon height
+            return { x, y };
+        }
+
+        document.querySelectorAll('.balloon').forEach(balloon => {
+            balloon.style.backgroundColor = getRandomColor();
+            const { x, y } = randomPosition();
+            balloon.style.left = `${x}px`;
+            balloon.style.top = `${y}px`;
+            balloon.style.animation = `floatAndForm 5s forwards`;
+        });
+
+        function animateToFinalPositions() {
+            const rows = document.querySelectorAll('.row');
+            rows.forEach((row, rowIndex) => {
+                const balloons = row.children;
+                const balloonCount = balloons.length;
+                const rowWidth = row.offsetWidth;
+                const totalBalloonWidth = balloonCount * 78; // Balloon width
+                const spacing = (rowWidth - totalBalloonWidth) / (balloonCount + 1) * 0.1; // Further reduced spacing
+                Array.from(balloons).forEach((balloon, index) => {
+                    balloon.style.animation = `formRow 2s forwards`;
+                    balloon.style.animationDelay = `${index * 0.5 + rowIndex * 2}s`;
+                    balloon.style.left = `${spacing * (index + 1) + 78 * index}px`;
+                    balloon.style.top = ''; // Clear top position to follow row styling
+                });
+            });
+        }
+
+        setTimeout(animateToFinalPositions, 5000); // Wait for initial animation to finish
+    </script>
+</body>
+</html>
